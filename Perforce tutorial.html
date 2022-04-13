@@ -1,0 +1,677 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Perforce使用指南</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="702dcba3-8830-459d-a0e0-e0669bd0d8b3" class="page sans"><header><h1 class="page-title">Perforce使用指南</h1></header><div class="page-body"><p id="4347e839-de34-4018-bdeb-04b71fb78eb3" class="">简写P4，是和Svn，性质相同的版本管理工具。对于大型二进制文件的支持很好，故游戏行业使用比较多。他是一个客户端/服务器（Client/Server）结构的应用。</p><p id="bc137b60-f206-403d-bda7-185dea62dfde" class="">补充一张图简化理解。</p><p id="77102687-fb7e-4a23-a9f7-462b151fd5d7" class="">
+</p><figure id="f9221101-45e5-465d-8f86-01977047f784" class="image"><a href="Perforce%20tutorial/Untitled.png"><img style="width:916px" src="Perforce%20tutorial/Untitled.png"/></a></figure><p id="28865de9-bb53-4728-961b-d4357f462458" class="">
+</p><ul id="c0ff8186-c36c-4f9a-b7b6-d4843a2285a4" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.perforce.com/downloads/helix-visual-client-p4v">客户端下载</a></li></ul><p id="976a7fef-d545-451e-982c-99dfd73aa5c6" class="">选平台(MacOS Linux Windows)后download，默认安装即可。</p><p id="2852e665-578b-4c43-8e66-7f8be0e5f51a" class="">安装好之后会有p4v, p4merge和p4admin三个程序可以使用。</p><p id="29508d8f-1361-4556-a5b7-b6114a8673b8" class="">p4v的v是Visual的意思，即可视化，操作比较友好，降低使用门槛，无需记忆大量p4命令。</p><p id="e96fede3-3203-43c4-8fdd-6cf540a2b01c" class="">首次打开应该出现配置连接的提示框，如下图：</p><p id="19ffeeea-dd4f-4dca-8da1-3904a46ea3d8" class="">登陆过一次下次再重新打开就无须配置连接了。</p><figure id="0b82b754-7633-48d4-8694-c81104173445" class="image"><a href="Perforce%20tutorial/Untitled.png"><img style="width:1770px" src="Perforce%20tutorial/Untitled3.png"/></a></figure><p id="cacb0e2b-471b-4e65-98f1-27c98e52adb1" class="">Server: 服务器的地址和端口，填写上就可以。</p><p id="6a61c21f-2666-40d4-ad69-7dcc411e4298" class="">User:登录用户名  </p><p id="b724f13c-2e46-426b-813b-dff90df18184" class="">Worksapce: 工作区可以暂时先留空白，稍后会讲。</p><p id="df20dd8d-2618-4385-82dc-2dee30b8c1f5" class="">如何在UE4内添加Perforce也会留到下一步补全。</p><p id="24aabc5e-237f-4441-9a90-b9137315ccd9" class="">下面的速查表介绍了可视化客户端图标解释和命令行客户端的命令说明，值得一看。</p><ul id="e95494f1-cb2e-48fd-b2e2-776fe09c8f03" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.shdsd.com/wp-content/uploads/2020/10/p4-p4v-cheat-sheet_cn.pdf">速查表</a></li></ul><p id="cdfecd8e-eca1-4da1-82d4-7ac7945983d1" class="">
+</p><h2 id="ff781be8-f55a-4375-9fb2-dbb403110fce" class="">Perforce工作界面介绍</h2><p id="5ebc2d39-fa92-4b03-9171-82956e0f8caa" class="">区域1有两个Tab， 可以查看仓库和工作目录和工作区文件·列表。</p><p id="d769ee4c-84d0-4267-99d0-f07266afad89" class="">Depot是仓库。我们的角色对目前我创建的仓库都有读写权限，所以也自然可见。</p><p id="b0cc5a69-3c0f-4984-bbcc-5724d1f6600a" class="">WorkSpace是工作目录，是我们自己设置的本地的目录。用于和远端同步的。</p><p id="1ebb4d71-7895-4bd1-a4c4-f9748bc0e9eb" class="">（补充个说人话的解释：版本控制软件其实就是维护了一个你<em><strong>本地工作目录和远端仓库的映射关系</strong></em>。</p><p id="fb89010b-ae15-47a9-be8f-9235031b88c1" class="">而Depot就是服务器端的仓库内容，Workspace是你本地的内容。一台服务器上可以有多个服务端。一个服务端可以有多个仓库）</p><p id="5cda2567-0c0f-4dc8-b1d5-d7284f4f2188" class="">
+</p><p id="b5d3bd8c-421c-499b-b5bc-18bdc4faebc0" class="">显示了服务器上可见目录结构（用户权限设置不同，可见目录也不同），这也与Workspace View映</p><p id="3c560bc7-296b-43a3-a660-4ab8fec038af" class="">射文件路径有关系，可以指定显示文件路径。</p><p id="ee458e52-a2b6-43fe-a6e2-1eae840d7e8f" class="">在这里，可以执行的操作包括： check out, submit,</p><p id="7d668a84-15d3-4000-8559-f17b6268a546" class="">Get Latest Revision, Revert Files等操作（区域3）</p><p id="516d58c3-5bdf-4c96-a265-86903c999ace" class="">Workspace目录区：</p><p id="e5114a6d-950b-47c8-85f5-4016914235e5" class="">显示了与服务器上文件有映射关系的，本地工作空间的目录结构(本地可以有多个工作空间)，这与Workspace View也有关系。</p><p id="3ae1a2e7-008e-418b-8a8c-b5612d54f792" class="">
+</p><p id="b0b6bb1f-0bd1-4f4f-907e-4c35f5b10618" class="">区域2有两个Tab（截图里只有两个，其实可以点击左边的+按钮添加</p><p id="9ef601ff-c13e-4d1f-90b7-c57c9d1a4add" class="">可以查看文件明细和 Pending changelist工作区</p><p id="e10079c2-99ea-40e9-9a05-02d4e60ca493" class="">文件明细(Files)展现了仓库里的文件具体内容和状态和预览等等功能。</p><p id="cb7b90be-e0d6-4c01-a174-44c7366036fe" class="">Pending当前用户正在修改的文件和其他开发者正在修改的文件。</p><p id="0c4503f1-e752-4ec0-b249-07b18e5e2ea2" class="">当然，你只需要关心你自己的project即可。当你执行：Mark for Add,check out等操作时，这些信息</p><p id="ec14fedf-fc9f-4316-9e9e-5b3e4b286a8b" class="">就会显示在changlist列表中显示，并由不同的图标显示其状态。如果你修改完成后，执行submit就</p><p id="4fb7a67b-2d6b-401b-9f4f-a46b3cddcf78" class="">可提交更新文件；但也可以执行revert放弃所作的修改。</p><figure id="07e7f849-be1f-4860-a831-d57ffe8c7a61" class="image"><a href="Perforce%20tutorial/Untitled%201.png"><img style="width:1796px" src="Perforce%20tutorial/Untitled%201.png"/></a></figure><figure id="8f2f0359-1870-4d67-988f-92ae698f05a7" class="image"><a href="Perforce%20tutorial/Untitled%202.png"><img style="width:1794px" src="Perforce%20tutorial/Untitled%202.png"/></a></figure><p id="2102154d-9a3f-4c45-8140-cb617ff9ff94" class="">
+</p><p id="d94f8ffd-8c95-4bd4-a991-cf4014700844" class="">
+</p><p id="6c4c09b2-b970-4e6d-a481-77d6e7d87441" class="">以下工作区都可以通过点+来添加Tab到区域2的视图上。</p><p id="eae5b702-ae94-43df-9c05-eec97545d2c6" class="">Submitted changelists 工作区</p><p id="4664be3a-116f-4370-9704-4d28e36d2387" class="">显示了近期所有项目组成员对项目所做的操作。</p><p id="a2b0a574-2475-4b2a-a9c8-605d602b1baf" class="">从中可以获得如：changlist号、修改时间、修改文件的内容、修改原因及修改人等信息。</p><p id="ba85ac26-ccb5-46e0-85ee-8ee501511ef8" class="">Workspace工作区</p><p id="b615d0f2-2a13-4bc7-a003-642592a0f5e0" class="">在该工作区中可显示所有连接在服务器上的客户端工作空间。</p><p id="51175381-3059-4d1f-a46e-4bfa3c56c5d2" class="">在此工作区内可以执行创建、编辑修改、删除用户工作空间等操作。（前提是有执行的权限。）</p><p id="74ca1352-5387-4c10-8a73-2814f0243bf3" class="">History工作区查看指定文件的变更历史信息。</p><p id="bc593cb1-f3c2-486f-9049-aad38ea810fa" class="">后面如何使用perforce的内容更多可以查看下面这个链接。</p><ul id="0528bf48-6014-40f2-97b2-eafebecefa42" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.cnblogs.com/carsonzhu/p/5067356.html">参考链接</a></li></ul><p id="916784b0-1863-405f-aaf8-533a38ee5c26" class="">UE4官方文档里也有，在此不更多赘述了。有问题提出来大家一起交流就是。多用一下就熟悉了。</p><p id="a2b7d868-66d4-465a-b474-23ef8e9729ee" class="">UE4.27如何使用perforce: </p><ul id="11f81d12-28a7-4524-8a31-0cff96ae281e" class="bulleted-list"><li style="list-style-type:disc"><a href="https://docs.unrealengine.com/4.27/zh-CN/ProductionPipelines/SourceControl/Perforce/">官方文档</a></li></ul><p id="0ea8eb50-efad-4ae0-858b-d2e9ed665013" class="">
+</p><h2 id="9c2800d6-f181-4622-aa27-3d6b3e6781dd" class=""><details open=""><summary>UE4工程需要跟踪的文件</summary></details></h2><p id="f3fdfe53-5335-4f84-aa88-7696bcb5c495" class="">Binaries 编译好的程序保存到这里，其下有子目录，对应不同的平台。此目录无需跟踪。</p><p id="89b1d0dd-1144-4be1-a449-e7dc8d4c73a0" class="">Config 配置文件保存目录，需要跟踪</p><p id="bdfca71f-904c-4531-ab91-bb8e29ccb1fc" class="">Content 游戏内容保存目录，需要跟踪，大头都在这里</p><p id="b6c2440d-d853-4167-b926-cb961f915d6e" class="">Intermediate 和名字的意思一样，中间目录，无需跟踪</p><p id="fa0148f3-ad45-4cba-885e-9adae3482dfd" class="">Saved 保存一些配置文件，工程的备份、日志等，按需要跟踪</p><p id="ea2fcc62-7005-43e4-8a92-b3709f6dfbd5" class="">Source 源代码目录，需要跟踪</p><p id="8a14890f-c3f7-4bf5-9e71-4e9b8db3439e" class="">XXX.uproject UE4工程文件，需要跟踪</p></div></article></body></html>
